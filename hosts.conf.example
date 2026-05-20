@@ -1,0 +1,27 @@
+# ccusage-hub configuration — copy to hosts.conf and edit.
+#   cp hosts.conf.example hosts.conf
+#
+# Sourced as bash by bin/*.sh. Values using $HOME / $USER are expanded
+# on the REMOTE hub at runtime, so prefer them over absolute paths.
+
+# === Hub: machine that aggregates data and runs ccusage ============
+HUB_SSH="myhub"                        # ssh alias or user@host (uses ~/.ssh/config)
+HUB_BASE='$HOME/ccusage-multi'         # remote base dir for pushed data
+HUB_NODE_BIN='$HOME/.nvm/versions/node/v22.22.0/bin'   # dir with node>=18; empty if already on PATH
+
+# === Identity of THIS machine (becomes a subdir name on the hub) =====
+# Use the hostname or any unique label. Each machine running ccusage-hub
+# MUST have a distinct LOCAL_NAME or their data will collide.
+LOCAL_NAME="my-laptop"
+
+# === Local source directories on THIS machine =======================
+# Leave any empty ("") to skip that platform.
+LOCAL_CLAUDE_PROJECTS="$HOME/.claude/projects"
+LOCAL_CODEX_SESSIONS="$HOME/.codex/sessions"
+LOCAL_OPENCODE_DIR="$HOME/.local/share/opencode"
+
+# === Hub's OWN local data dirs (counted in stats automatically) ======
+# Set to '' if the hub itself has no usage for that platform.
+HUB_CLAUDE='$HOME/.claude'
+HUB_CODEX='$HOME/.codex'
+HUB_OPENCODE=''

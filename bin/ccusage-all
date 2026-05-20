@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+# ccusage-all — run a unified ccusage report over the hub's own data plus
+# every per-host subdir under $HUB_BASE. Install on the hub machine
+# (e.g. copy to ~/.local/bin/ccusage-all) so you can just type `ccusage-all`.
+#
+# Config via environment (all optional):
+#   HUB_BASE      base dir holding per-host subdirs   (default: $HOME/ccusage-multi)
+#   NODE_BIN      dir with node >= 18 to prepend to PATH (default: empty = use PATH)
+#   HUB_CLAUDE    hub's own Claude data dir            (default: $HOME/.claude)
+#   HUB_CODEX     hub's own Codex data dir             (default: $HOME/.codex)
+#   HUB_OPENCODE  hub's own OpenCode data dir          (default: empty = skip)
+#
+# Usage:
+#   ccusage-all                  # monthly --compact (default)
+#   ccusage-all daily            # any ccusage subcommand/flags
+#   ccusage-all "monthly --json" # quote multi-word args
+#   ccusage-all --show-env       # print resolved paths and exit
+set -euo pipefail
+
+HUB_BASE="${HUB_BASE:-$HOME/ccusage-multi}"
+NODE_BIN="${NODE_BIN:-}"
+HUB_CLAUDE="${HUB_CLAUDE:-$HOME/.claude}"
+HUB_CODEX="${HUB_CODEX:-$HOME/.codex}"
+HUB_OPENCODE="${HUB_OPENCODE:-}"
+
+[ -n "$NODE_BIN" ] && [ -d "$NODE_BIN" ] && export PATH="$NODE_BIN:$PATH"
+
+HOSTS=$(ls -1 "$HUB_BASE" 2>/dev/null || true)
+
+build() {
+  local hub_local="$1" sub="$2"
+  local parts=()
+  [ -n "$hub_local" ] && parts+=("$hub_local")
+  for h in $HOSTS; do parts+=("$HUB_BASE/$h/$sub"); done
+  local IFS=,
+  echo "${parts[*]}"
+}
+
+export CLAUDE_CONFIG_DIR="$(build "$HUB_CLAUDE"   .claude)"
+export CODEX_HOME="$(build        "$HUB_CODEX"    .codex)"
+export OPENCODE_DATA_DIR="$(build "$HUB_OPENCODE" opencode)"
+
+if [ "${1:-}" = "--show-env" ]; then
+  echo "Hosts:            $(echo $HOSTS | tr '\n' ' ')"
+  echo "CLAUDE_CONFIG_DIR=$CLAUDE_CONFIG_DIR"
+  echo "CODEX_HOME=$CODEX_HOME"
+  echo "OPENCODE_DATA_DIR=$OPENCODE_DATA_DIR"
+  exit 0
+fi
+
+ARGS="${*:-monthly --compact}"
+exec npx -y ccusage@latest $ARGS

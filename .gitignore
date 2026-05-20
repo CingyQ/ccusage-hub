@@ -1,0 +1,8 @@
+# Personal configuration — never commit
+hosts.conf
+
+# Logs, OS cruft, transient output
+*.log
+.DS_Store
+manifests/
+*.json.tmp

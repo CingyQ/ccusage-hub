@@ -1,0 +1,8 @@
+# Shell scripts must stay LF — they run on the Linux hub.
+*.sh        text eol=lf
+bin/ccusage-all text eol=lf
+hosts.conf.example text eol=lf
+
+# Normalize the rest
+*.md   text
+LICENSE text
