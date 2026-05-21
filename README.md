@@ -55,6 +55,7 @@ Key fields in `hosts.conf`:
 | `HUB_SSH` | ssh alias or `user@host` for the hub |
 | `HUB_BASE` | remote dir for aggregated data (default `$HOME/ccusage-multi`) |
 | `HUB_NODE_BIN` | dir containing node ≥ 18 on the hub (empty if already on `PATH`) |
+| `CCUSAGE_VERSION` | npm version/tag of ccusage to run (`latest`, or pin e.g. `19`) |
 | `LOCAL_NAME` | **unique** label for this machine (its subdir on the hub) |
 | `LOCAL_CLAUDE_PROJECTS` / `LOCAL_CODEX_SESSIONS` / `LOCAL_OPENCODE_DIR` | local source dirs (empty to skip a platform) |
 | `HUB_CLAUDE` / `HUB_CODEX` / `HUB_OPENCODE` | hub's own data dirs, so its local usage is counted too |
@@ -111,6 +112,7 @@ workflow for agent-driven use.
 - Append-only by design: these scripts never delete remote files. Do cleanup manually.
 - OpenCode stores `cost: 0` in its records; ccusage recomputes cost from tokens via the LiteLLM price table.
 - Clock skew between machines may make `tar` print a harmless "timestamp in the future" warning.
+- ccusage **v20.0.0–20.0.1** has a `monthly` aggregation bug ([#1097](https://github.com/ryoppippi/ccusage/issues/1097)) that expands agent rows per day instead of per month. Until it's fixed in a release, set `CCUSAGE_VERSION="19"` in `hosts.conf`. Switch back to `latest` once resolved.
 
 ## License
 

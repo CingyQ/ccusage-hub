@@ -63,5 +63,5 @@ HUB bash -lc "'
   export CLAUDE_CONFIG_DIR=\"$CLAUDE_LIST\"
   export CODEX_HOME=\"$CODEX_LIST\"
   export OPENCODE_DATA_DIR=\"$OPENCODE_LIST\"
-  npx -y ccusage@latest $CCUSAGE_ARGS
+  npx -y ccusage@${CCUSAGE_VERSION:-latest} $CCUSAGE_ARGS
 '"

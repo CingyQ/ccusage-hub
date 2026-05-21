@@ -9,6 +9,9 @@
 #   HUB_CLAUDE    hub's own Claude data dir            (default: $HOME/.claude)
 #   HUB_CODEX     hub's own Codex data dir             (default: $HOME/.codex)
 #   HUB_OPENCODE  hub's own OpenCode data dir          (default: empty = skip)
+#   CCUSAGE_VERSION  npm version/tag of ccusage to run (default: latest)
+#                    Pin to "19" while v20's monthly per-period aggregation
+#                    bug (ryoppippi/ccusage#1097) is unfixed in the release.
 #
 # Usage:
 #   ccusage-all                  # monthly --compact (default)
@@ -49,4 +52,4 @@ if [ "${1:-}" = "--show-env" ]; then
 fi
 
 ARGS="${*:-monthly --compact}"
-exec npx -y ccusage@latest $ARGS
+exec npx -y "ccusage@${CCUSAGE_VERSION:-latest}" $ARGS

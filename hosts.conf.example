@@ -9,6 +9,10 @@ HUB_SSH="myhub"                        # ssh alias or user@host (uses ~/.ssh/con
 HUB_BASE='$HOME/ccusage-multi'         # remote base dir for pushed data
 HUB_NODE_BIN='$HOME/.nvm/versions/node/v22.22.0/bin'   # dir with node>=18; empty if already on PATH
 
+# ccusage version/tag to run. "latest" for newest; pin "19" while v20's
+# monthly per-period aggregation bug (ryoppippi/ccusage#1097) is unfixed.
+CCUSAGE_VERSION="19"
+
 # === Identity of THIS machine (becomes a subdir name on the hub) =====
 # Use the hostname or any unique label. Each machine running ccusage-hub
 # MUST have a distinct LOCAL_NAME or their data will collide.
